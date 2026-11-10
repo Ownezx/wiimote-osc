@@ -90,6 +90,7 @@ These messages describe device availability. They should be emitted when the cor
 
 | OSC address | Keybind / physical control                                              | Arguments | Description                                          |
 | ----------- | ----------------------------------------------------------------------- | --------- | ---------------------------------------------------- |
+| `/wmX/c`    | Color being modified                                                    | `i`       | A color currently being selected {1,2,3,4}           |
 | `/wmX/c1r`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Red component of color 1                             |
 | `/wmX/c1g`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Green component of color 1                           |
 | `/wmX/c1b`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Blue component of color 1                            |
@@ -112,5 +113,5 @@ These messages describe device availability. They should be emitted when the cor
 Notes:
 
 - Color output values between 0 and 1
-- To select the color, the nunchuk is used as a 360º control for hue and the IRx for saturation and IRy for value, if in much bigger deadzone don't modify color
+- To select the color, the nunchuk is used as a 360º control for hue (if in much bigger deadzone don't modify color) and the IRx for saturation and IRy for value
 - long presses are 1 second long
