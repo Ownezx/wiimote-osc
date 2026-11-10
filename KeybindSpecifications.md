@@ -62,8 +62,6 @@ These addresses are active only when a Nunchuk is attached. A controller without
 
 ## Nunchuk accelerometer (optional)
 
-Nunchuk accelerometer messages are sent only when a Nunchuk is attached and accelerometer streaming is enabled using the same two-second A hold gesture. The Wii Remote and Nunchuk sensors have separate address paths.
-
 | OSC address | Keybind / physical control       | Arguments     | Description                  |
 | ----------- | -------------------------------- | ------------- | ---------------------------- |
 | `/wmX/n/ax` | Nunchuk accelerometer **X** axis | `f` — G value | Nunchuk X-axis acceleration. |
@@ -76,6 +74,8 @@ Nunchuk accelerometer messages are sent only when a Nunchuk is attached and acce
 | ----------- | ---------------------------------- | --------- | --------------------------------------------------- |
 | `/wmX/n/jx` | Nunchuk joystick — horizontal axis | `f`       | Horizontal position: `-1.0` = left, `+1.0` = right. |
 | `/wmX/n/jy` | Nunchuk joystick — vertical axis   | `f`       | Vertical position: `-1.0` = down,`+1.0` = up.       |
+
+Note: Deadzone continuously sends 0.
 
 ## Connection and extension status
 
@@ -108,3 +108,9 @@ These messages describe device availability. They should be emitted when the cor
 | `/wmX/f2`   | Nunchuk C button + D-pad RIGHT long press                               | `i`       | Toggle function 2                                    |
 | `/wmX/f3`   | Nunchuk C button + D-pad DOWN long press                                | `i`       | Toggle function 3                                    |
 | `/wmX/f4`   | Nunchuk C button + D-pad LEFT long press                                | `i`       | Toggle function 4                                    |
+
+Notes:
+
+- Color output values between 0 and 1
+- To select the color, the nunchuk is used as a 360º control for hue and the IRx for saturation and IRy for value, if in much bigger deadzone don't modify color
+- long presses are 1 second long
