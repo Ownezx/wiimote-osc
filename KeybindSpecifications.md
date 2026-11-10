@@ -90,7 +90,7 @@ These messages describe device availability. They should be emitted when the cor
 
 | OSC address | Keybind / physical control                                              | Arguments | Description                                          |
 | ----------- | ----------------------------------------------------------------------- | --------- | ---------------------------------------------------- |
-| `/wmX/c`    | Color being modified                                                    | `i`       | A color currently being selected {1,2,3,4}           |
+| `/wmX/cs`   | Color being modified                                                    | `i`       | A color currently being selected {1,2,3,4}           |
 | `/wmX/c1r`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Red component of color 1                             |
 | `/wmX/c1g`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Green component of color 1                           |
 | `/wmX/c1b`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Blue component of color 1                            |
