@@ -15,6 +15,13 @@ This document defines the OSC addresses, physical controls, argument types, and 
 - Accelerometer axis values use OSC `f` (32-bit float) for G-force values.
 - Nunchuk messages are sent only while a Nunchuk is connected and its data is available.
 
+## Function keys
+
+Because we wish to have function keys to create specific actions, certain buttons are not used in the OSC scheme and instead used to create other key combinations as presented in the key [key combination section](#key-combinations) .
+
+- Nunchuk C button is considered as a shift key
+- D-pad is used for color actions and toggles
+
 ## Wii Remote buttons
 
 Each button has a single state address. Send `1` when the button becomes pressed and `0` when it is released.
@@ -28,14 +35,8 @@ Each button has a single state address. Send `1` when the button becomes pressed
 | `/wmX/bp`   | **+**                      | `i` — `1` pressed, `0` released | Plus button.               |
 | `/wmX/bm`   | **−**                      | `i` — `1` pressed, `0` released | Minus button.              |
 | `/wmX/bh`   | **HOME**                   | `i` — `1` pressed, `0` released | Home button.               |
-| `/wmX/bu`   | D-pad **Up**               | `i` — `1` pressed, `0` released | D-pad Up.                  |
-| `/wmX/bd`   | D-pad **Down**             | `i` — `1` pressed, `0` released | D-pad Down.                |
-| `/wmX/bl`   | D-pad **Left**             | `i` — `1` pressed, `0` released | D-pad Left.                |
-| `/wmX/br`   | D-pad **Right**            | `i` — `1` pressed, `0` released | D-pad Right.               |
 
 ## Accelerometer hold gesture
-
-The default interaction is: press and hold **A**; after two seconds, start sending accelerometer data. Releasing A stops the stream. The ordinary `/wmX/b/a` state messages are still sent as usual.
 
 | OSC address | Keybind / physical control          | Arguments     | Description                  |
 | ----------- | ----------------------------------- | ------------- | ---------------------------- |
@@ -43,7 +44,13 @@ The default interaction is: press and hold **A**; after two seconds, start sendi
 | `/wmX/ay`   | Wii Remote accelerometer **Y** axis | `f` — G value | Wiimote Y-axis acceleration. |
 | `/wmX/az`   | Wii Remote accelerometer **Z** axis | `f` — G value | Wiimote Z-axis acceleration. |
 
-Raw and G-force values describe the same sensor sample in different forms. Receivers that need physical acceleration should generally use the G-force addresses; receivers that need device-specific sensor counts can use the raw addresses.
+## IR sensor
+
+| OSC address | Keybind / physical control | Arguments | Description                 |
+| ----------- | -------------------------- | --------- | --------------------------- |
+| `/wmX/irx`  | IR horizontal position     | `f`       | Wiimote X-axis IR position. |
+| `/wmX/iry`  | IR vertical position       | `f`       | Wiimote Y-axis IR position. |
+| `/wmX/irv`  | IR visible                 | `i`       | 1 if visible.               |
 
 ## Nunchuk buttons (optional)
 
@@ -51,7 +58,6 @@ These addresses are active only when a Nunchuk is attached. A controller without
 
 | OSC address | Keybind / physical control | Arguments                       | Description             |
 | ----------- | -------------------------- | ------------------------------- | ----------------------- |
-| `/wmX/n/bc` | Nunchuk **C**              | `i` — `1` pressed, `0` released | Nunchuk C button state. |
 | `/wmX/n/bz` | Nunchuk **Z**              | `i` — `1` pressed, `0` released | Nunchuk Z button state. |
 
 ## Nunchuk accelerometer (optional)
@@ -79,3 +85,26 @@ These messages describe device availability. They should be emitted when the cor
 | ----------- | -------------------------- | ------------------------------------- | --------------------- |
 | `/wmX/c`    | Wii Remote connection      | `i` — `1` connected, `0` disconnected | Wii Remote connected. |
 | `/wmX/n/c`  | Nunchuk attach / detach    | `i` — `1` connected, `0` disconnected | Nunchuk connected.    |
+
+## Key combinations
+
+| OSC address | Keybind / physical control                                              | Arguments | Description                                          |
+| ----------- | ----------------------------------------------------------------------- | --------- | ---------------------------------------------------- |
+| `/wmX/c1r`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Red component of color 1                             |
+| `/wmX/c1g`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Green component of color 1                           |
+| `/wmX/c1b`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Blue component of color 1                            |
+| `/wmX/c2r`  | D-pad RIGHT + Nunchuk joystick (hue) + IR position (saturation + value) | `f`       | Red component of color 2                             |
+| `/wmX/c2g`  | D-pad RIGHT + Nunchuk joystick (hue) + IR position (saturation + value) | `f`       | Green component of color 2                           |
+| `/wmX/c2b`  | D-pad RIGHT + Nunchuk joystick (hue) + IR position (saturation + value) | `f`       | Blue component of color 2                            |
+| `/wmX/c3r`  | D-pad DOWN + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Red component of color 3                             |
+| `/wmX/c3g`  | D-pad DOWN + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Green component of color 3                           |
+| `/wmX/c3b`  | D-pad DOWN + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Blue component of color 3                            |
+| `/wmX/c4r`  | D-pad LEFT + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Red component of color 4                             |
+| `/wmX/c4g`  | D-pad LEFT + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Green component of color 4                           |
+| `/wmX/c4b`  | D-pad LEFT + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Blue component of color 4                            |
+| `/wmX/cx`   | Nunchuk C button + Nunchuk joystick X                                   | `f`       | Linear choice between color 2 and 4, middle is black |
+| `/wmX/cy`   | Nunchuk C button + Nunchuk joystick Y                                   | `f`       | Linear choice between color 1 and 3, middle is black |
+| `/wmX/f1`   | Nunchuk C button + D-pad UP long press                                  | `i`       | Toggle function 1                                    |
+| `/wmX/f2`   | Nunchuk C button + D-pad RIGHT long press                               | `i`       | Toggle function 2                                    |
+| `/wmX/f3`   | Nunchuk C button + D-pad DOWN long press                                | `i`       | Toggle function 3                                    |
+| `/wmX/f4`   | Nunchuk C button + D-pad LEFT long press                                | `i`       | Toggle function 4                                    |
