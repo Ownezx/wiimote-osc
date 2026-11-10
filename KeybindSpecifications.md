@@ -1,9 +1,9 @@
 # Wii Remote OSC Binding Specification
 
-**Status:** Proposed default mapping  
-**Namespace:** `/wmX`with `X` the wiimote number
-**Controller:** Nintendo Wii Remote (RVL-003 / RVL-CNT-01)  
-**Optional extension:** Nunchuk
+Status: Proposed default mapping  
+Namespace: `/wmX`with `X` the wiimote number
+Controller: Nintendo Wii Remote (RVL-003 / RVL-CNT-01)  
+Optional extension: Nunchuk
 
 This document defines the OSC addresses, physical controls, argument types, and behavior for mapping a Wii Remote to OSC. The mapping is designed around the Rust `wiiuse-rs` state API: button states, accelerometer readings, and optional Nunchuk state.
 
@@ -28,21 +28,21 @@ Each button has a single state address. Send `1` when the button becomes pressed
 
 | OSC address | Keybind / physical control | Arguments                       | Description                |
 | ----------- | -------------------------- | ------------------------------- | -------------------------- |
-| `/wmX/ba`   | **A**                      | `i` — `1` pressed, `0` released | Main face action button.   |
-| `/wmX/bb`   | **B**                      | `i` — `1` pressed, `0` released | Wii Remote trigger button. |
-| `/wmX/b1`   | **1**                      | `i` — `1` pressed, `0` released | Numbered button 1.         |
-| `/wmX/b2`   | **2**                      | `i` — `1` pressed, `0` released | Numbered button 2.         |
-| `/wmX/bp`   | **+**                      | `i` — `1` pressed, `0` released | Plus button.               |
-| `/wmX/bm`   | **−**                      | `i` — `1` pressed, `0` released | Minus button.              |
-| `/wmX/bh`   | **HOME**                   | `i` — `1` pressed, `0` released | Home button.               |
+| `/wmX/ba`   | A                          | `i` — `1` pressed, `0` released | Main face action button.   |
+| `/wmX/bb`   | B                          | `i` — `1` pressed, `0` released | Wii Remote trigger button. |
+| `/wmX/b1`   | 1                          | `i` — `1` pressed, `0` released | Numbered button 1.         |
+| `/wmX/b2`   | 2                          | `i` — `1` pressed, `0` released | Numbered button 2.         |
+| `/wmX/bp`   | +                          | `i` — `1` pressed, `0` released | Plus button.               |
+| `/wmX/bm`   | −                          | `i` — `1` pressed, `0` released | Minus button.              |
+| `/wmX/bh`   | HOME                       | `i` — `1` pressed, `0` released | Home button.               |
 
 ## Accelerometer hold gesture
 
-| OSC address | Keybind / physical control          | Arguments     | Description                  |
-| ----------- | ----------------------------------- | ------------- | ---------------------------- |
-| `/wmX/ax`   | Wii Remote accelerometer **X** axis | `f` — G value | Wiimote X-axis acceleration. |
-| `/wmX/ay`   | Wii Remote accelerometer **Y** axis | `f` — G value | Wiimote Y-axis acceleration. |
-| `/wmX/az`   | Wii Remote accelerometer **Z** axis | `f` — G value | Wiimote Z-axis acceleration. |
+| OSC address | Keybind / physical control      | Arguments     | Description                  |
+| ----------- | ------------------------------- | ------------- | ---------------------------- |
+| `/wmX/ax`   | Wii Remote accelerometer X axis | `f` — G value | Wiimote X-axis acceleration. |
+| `/wmX/ay`   | Wii Remote accelerometer Y axis | `f` — G value | Wiimote Y-axis acceleration. |
+| `/wmX/az`   | Wii Remote accelerometer Z axis | `f` — G value | Wiimote Z-axis acceleration. |
 
 ## IR sensor
 
@@ -58,15 +58,15 @@ These addresses are active only when a Nunchuk is attached. A controller without
 
 | OSC address | Keybind / physical control | Arguments                       | Description             |
 | ----------- | -------------------------- | ------------------------------- | ----------------------- |
-| `/wmX/n/bz` | Nunchuk **Z**              | `i` — `1` pressed, `0` released | Nunchuk Z button state. |
+| `/wmX/n/bz` | Nunchuk Z                  | `i` — `1` pressed, `0` released | Nunchuk Z button state. |
 
 ## Nunchuk accelerometer (optional)
 
-| OSC address | Keybind / physical control       | Arguments     | Description                  |
-| ----------- | -------------------------------- | ------------- | ---------------------------- |
-| `/wmX/n/ax` | Nunchuk accelerometer **X** axis | `f` — G value | Nunchuk X-axis acceleration. |
-| `/wmX/n/ay` | Nunchuk accelerometer **Y** axis | `f` — G value | Nunchuk Y-axis acceleration. |
-| `/wmX/n/az` | Nunchuk accelerometer **Z** axis | `f` — G value | Nunchuk Z-axis acceleration. |
+| OSC address | Keybind / physical control   | Arguments     | Description                  |
+| ----------- | ---------------------------- | ------------- | ---------------------------- |
+| `/wmX/n/ax` | Nunchuk accelerometer X axis | `f` — G value | Nunchuk X-axis acceleration. |
+| `/wmX/n/ay` | Nunchuk accelerometer Y axis | `f` — G value | Nunchuk Y-axis acceleration. |
+| `/wmX/n/az` | Nunchuk accelerometer Z axis | `f` — G value | Nunchuk Z-axis acceleration. |
 
 ## Nunchuk joystick OSC mapping
 
