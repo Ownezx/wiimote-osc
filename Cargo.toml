@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-wiiuse-rs = { path = "../wiiuse-rs/wiiuse-rs" }
+wiiuse-rs = { git = "https://github.com/Ownezx/wiiuse-rs.git", branch = "dev" }
