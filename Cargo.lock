@@ -154,6 +154,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "open-sound-control"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f075639dad86ed4c4b4b2effda2d2598b6e8855657a2f1ec9fb5e721ba89107b"
+
+[[package]]
 name = "prettyplease"
 version = "0.2.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -249,13 +255,14 @@ checksum = "a2c754d6c33795a1c324727428e5a7dedb5b06195f9890bdbcba760d3e246563"
 name = "wiimote-osc"
 version = "0.1.0"
 dependencies = [
+ "open-sound-control",
  "wiiuse-rs",
 ]
 
 [[package]]
 name = "wiiuse-rs"
 version = "0.1.0"
-source = "git+https://github.com/Ownezx/wiiuse-rs.git?branch=dev#c7ce76f192dec9e473feb18bbae43d96ed0a075e"
+source = "git+https://github.com/Ownezx/wiiuse-rs.git?branch=main#90fed6f0ba79d9f573c63ce57a3a32d435523d5c"
 dependencies = [
  "bindgen",
  "cc",

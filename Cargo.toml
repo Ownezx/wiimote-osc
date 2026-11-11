@@ -4,4 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-wiiuse-rs = { git = "https://github.com/Ownezx/wiiuse-rs.git", branch = "dev" }
+wiiuse-rs = { git = "https://github.com/Ownezx/wiiuse-rs.git", branch = "main" }
+open-sound-control = "0.9"
