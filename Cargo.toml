@@ -7,3 +7,13 @@ edition = "2021"
 wiiuse-rs = { git = "https://github.com/Ownezx/wiiuse-rs.git", branch = "main" }
 open-sound-control = "0.9"
 clap = { version = "4.6", features = ["derive"] }
+
+# Linting rules
+[lints]
+workspace = true
+
+[workspace.lints.rust]
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+missing_docs_in_private_items = "warn"

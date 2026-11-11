@@ -1,3 +1,5 @@
+//! Wiimote OSC core logic
+
 use open_sound_control::{OscArgument, OscMessage, OscSender};
 use std::net::IpAddr;
 use std::thread;

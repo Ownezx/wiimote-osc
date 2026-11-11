@@ -1,3 +1,5 @@
+//! Wiimote OSC maps Wii remote data to specific OSC actions in order to control lights
+
 mod constants;
 mod wiimote_osc;
 
