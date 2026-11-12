@@ -151,19 +151,6 @@ fn send_buttons(sender: &OscSender, wiimote_number: usize, state: &WiimoteState)
 
         sender.send_message(&message);
     }
-
-    // Send Nunchuk button state only while a Nunchuk is connected.
-    if let Some(nunchuk) = &state.nunchuk {
-        let pressed = nunchuk.buttons.down.contains(NunchukButtons::Z)
-            || nunchuk.buttons.held.contains(NunchukButtons::Z);
-
-        let message = OscMessage {
-            address: format!("{prefix}/n/bz"),
-            arguments: vec![OscArgument::Int32(if pressed { 1 } else { 0 })],
-        };
-
-        sender.send_message(&message);
-    }
 }
 
 /// Send all four function toggle states as OSC integer messages.

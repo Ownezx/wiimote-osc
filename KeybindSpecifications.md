@@ -52,14 +52,6 @@ Each button has a single state address. Send `1` when the button becomes pressed
 | `/wmX/iry`  | IR vertical position       | `f`       | Wiimote Y-axis IR position. |
 | `/wmX/irv`  | IR visible                 | `i`       | 1 if visible.               |
 
-## Nunchuk buttons (optional)
-
-These addresses are active only when a Nunchuk is attached. A controller without a Nunchuk simply does not emit these messages.
-
-| OSC address | Keybind / physical control | Arguments                       | Description             |
-| ----------- | -------------------------- | ------------------------------- | ----------------------- |
-| `/wmX/n/bz` | Nunchuk Z                  | `i` — `1` pressed, `0` released | Nunchuk Z button state. |
-
 ## Nunchuk accelerometer (optional)
 
 | OSC address | Keybind / physical control   | Arguments     | Description                  |
@@ -96,8 +88,8 @@ These messages describe device availability. They should be emitted when the cor
 | N/A         | D-pad RIGHT + Nunchuk joystick (hue) + IR position (saturation + value) | N/A       | Color 2 select                                                     |
 | N/A         | D-pad DOWN + Nunchuk joystick (hue) + IR position (saturation + value)  | N/A       | Color 3 select                                                     |
 | N/A         | D-pad LEFT + Nunchuk joystick (hue) + IR position (saturation + value)  | N/A       | Color 4 select                                                     |
-| N/A         | Nunchuk C button + Nunchuk joystick X                                   | N/A       | Linear choice between color 2 and 4, middle is black               |
-| N/A         | Nunchuk C button + Nunchuk joystick Y                                   | N/A       | Linear choice between color 1 and 3, middle is black               |
+| N/A         | Nunchuk Z button + Nunchuk joystick X                                   | N/A       | Linear choice between color 2 and 4, middle is black               |
+| N/A         | Nunchuk Z button + Nunchuk joystick Y                                   | N/A       | Linear choice between color 1 and 3, middle is black               |
 | `/wmX/f1`   | Nunchuk C button + D-pad UP long press                                  | `i`       | Toggle function 1                                                  |
 | `/wmX/f2`   | Nunchuk C button + D-pad RIGHT long press                               | `i`       | Toggle function 2                                                  |
 | `/wmX/f3`   | Nunchuk C button + D-pad DOWN long press                                | `i`       | Toggle function 3                                                  |
