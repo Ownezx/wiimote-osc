@@ -18,3 +18,6 @@ pub const OSC_SEND_INTERVAL: Duration = Duration::from_millis(20);
 pub const DEFAULT_DESTINATION_IP: &str = "127.0.0.1";
 /// Default OSC stream target port
 pub const DEFAULT_DESTINATION_PORT: u16 = 10123;
+
+/// Long press time
+pub const FUNCTION_LONG_PRESS: Duration = Duration::from_millis(250);

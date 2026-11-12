@@ -7,8 +7,27 @@ use std::time::Instant;
 use wiiuse_rs::{NunchukButtons, WiimoteButtons, WiimoteSet, WiimoteState};
 
 use crate::constants::{
-    FIND_TIMEOUT, MAX_WIIMOTES, OSC_SEND_INTERVAL, POLL_INTERVAL, WIIMOTE_NUMBER,
+    FIND_TIMEOUT, FUNCTION_LONG_PRESS, MAX_WIIMOTES, OSC_SEND_INTERVAL, POLL_INTERVAL,
+    WIIMOTE_NUMBER,
 };
+
+/// Tracks the state of an individual function toggle.
+#[derive(Default)]
+struct FunctionToggle {
+    /// Time since the button has been started
+    pressed_since: Option<Instant>,
+    /// The button has already been triggered
+    triggered: bool,
+    /// Current status of the toggle.
+    enabled: bool,
+}
+
+/// Tracks all four function toggles.
+#[derive(Default)]
+struct FunctionToggles {
+    ///Array containing the value of all four toggles.
+    functions: [FunctionToggle; 4],
+}
 
 /// Connect to a Wii Remote and stream its state over OSC/UDP.
 pub fn run(destination_ip: IpAddr, destination_port: u16) -> Result<(), String> {
@@ -16,6 +35,7 @@ pub fn run(destination_ip: IpAddr, destination_port: u16) -> Result<(), String> 
     let osc_sender = OscSender::new(destination_ip_text.clone(), u32::from(destination_port));
 
     let mut devices = connect_wiimote()?;
+    let mut function_toggles = FunctionToggles::default();
 
     println!("Sending Wiimote OSC to {destination_ip_text}:{destination_port} at 50 Hz.");
     println!("Press Ctrl+C to stop.");
@@ -23,15 +43,18 @@ pub fn run(destination_ip: IpAddr, destination_port: u16) -> Result<(), String> 
     let mut next_osc_send = Instant::now();
 
     loop {
-        // Poll frequently, but throttle OSC output independently to 50 Hz.
         devices.poll();
 
         if let Some(state) = devices.state(0) {
+            // Update toggle states on every controller poll.
+            update_function_toggles(&state, &mut function_toggles);
+
             let now = Instant::now();
 
             if now >= next_osc_send {
                 send_accelerometer(&osc_sender, WIIMOTE_NUMBER, &state);
                 send_buttons(&osc_sender, WIIMOTE_NUMBER, &state);
+                send_function_states(&osc_sender, WIIMOTE_NUMBER, &function_toggles);
 
                 next_osc_send = now + OSC_SEND_INTERVAL;
             }
@@ -140,5 +163,69 @@ fn send_buttons(sender: &OscSender, wiimote_number: usize, state: &WiimoteState)
         };
 
         sender.send_message(&message);
+    }
+}
+
+/// Send all four function toggle states as OSC integer messages.
+fn send_function_states(sender: &OscSender, wiimote_number: usize, toggles: &FunctionToggles) {
+    let prefix = format!("/wm{wiimote_number}");
+
+    for (index, function) in toggles.functions.iter().enumerate() {
+        let message = OscMessage {
+            address: format!("{prefix}/f{}", index + 1),
+            arguments: vec![OscArgument::Int32(if function.enabled { 1 } else { 0 })],
+        };
+
+        sender.send_message(&message);
+    }
+}
+
+/// Handle Nunchuk C + D-pad long presses.
+///
+/// Each combination must be held continuously for one second.
+/// A function toggles only once per long press.
+fn update_function_toggles(state: &WiimoteState, toggles: &mut FunctionToggles) {
+    let nunchuk = match &state.nunchuk {
+        Some(nunchuk) => nunchuk,
+        None => {
+            for function in &mut toggles.functions {
+                function.pressed_since = None;
+                function.triggered = false;
+            }
+            return;
+        }
+    };
+
+    let c_is_down = nunchuk.buttons.down.contains(NunchukButtons::C)
+        || nunchuk.buttons.held.contains(NunchukButtons::C);
+
+    let directions = [
+        WiimoteButtons::UP,
+        WiimoteButtons::RIGHT,
+        WiimoteButtons::DOWN,
+        WiimoteButtons::LEFT,
+    ];
+
+    let now = Instant::now();
+
+    for (index, direction) in directions.into_iter().enumerate() {
+        let direction_is_down =
+            state.buttons.down.contains(direction) || state.buttons.held.contains(direction);
+
+        let combination_is_down = c_is_down && direction_is_down;
+        let function = &mut toggles.functions[index];
+
+        if !combination_is_down {
+            function.pressed_since = None;
+            function.triggered = false;
+            continue;
+        }
+
+        let pressed_since = *function.pressed_since.get_or_insert(now);
+
+        if !function.triggered && now.duration_since(pressed_since) >= FUNCTION_LONG_PRESS {
+            function.enabled = !function.enabled;
+            function.triggered = true;
+        }
     }
 }

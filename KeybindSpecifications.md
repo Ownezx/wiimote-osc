@@ -88,27 +88,20 @@ These messages describe device availability. They should be emitted when the cor
 
 ## Key combinations
 
-| OSC address | Keybind / physical control                                              | Arguments | Description                                          |
-| ----------- | ----------------------------------------------------------------------- | --------- | ---------------------------------------------------- |
-| `/wmX/cs`   | N/A                                                                     | `i`       | A color currently being selected {1,2,3,4}           |
-| `/wmX/c1r`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Red component of color 1                             |
-| `/wmX/c1g`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Green component of color 1                           |
-| `/wmX/c1b`  | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | `f`       | Blue component of color 1                            |
-| `/wmX/c2r`  | D-pad RIGHT + Nunchuk joystick (hue) + IR position (saturation + value) | `f`       | Red component of color 2                             |
-| `/wmX/c2g`  | D-pad RIGHT + Nunchuk joystick (hue) + IR position (saturation + value) | `f`       | Green component of color 2                           |
-| `/wmX/c2b`  | D-pad RIGHT + Nunchuk joystick (hue) + IR position (saturation + value) | `f`       | Blue component of color 2                            |
-| `/wmX/c3r`  | D-pad DOWN + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Red component of color 3                             |
-| `/wmX/c3g`  | D-pad DOWN + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Green component of color 3                           |
-| `/wmX/c3b`  | D-pad DOWN + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Blue component of color 3                            |
-| `/wmX/c4r`  | D-pad LEFT + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Red component of color 4                             |
-| `/wmX/c4g`  | D-pad LEFT + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Green component of color 4                           |
-| `/wmX/c4b`  | D-pad LEFT + Nunchuk joystick (hue) + IR position (saturation + value)  | `f`       | Blue component of color 4                            |
-| `/wmX/cx`   | Nunchuk C button + Nunchuk joystick X                                   | `f`       | Linear choice between color 2 and 4, middle is black |
-| `/wmX/cy`   | Nunchuk C button + Nunchuk joystick Y                                   | `f`       | Linear choice between color 1 and 3, middle is black |
-| `/wmX/f1`   | Nunchuk C button + D-pad UP long press                                  | `i`       | Toggle function 1                                    |
-| `/wmX/f2`   | Nunchuk C button + D-pad RIGHT long press                               | `i`       | Toggle function 2                                    |
-| `/wmX/f3`   | Nunchuk C button + D-pad DOWN long press                                | `i`       | Toggle function 3                                    |
-| `/wmX/f4`   | Nunchuk C button + D-pad LEFT long press                                | `i`       | Toggle function 4                                    |
+| OSC address | Keybind / physical control                                              | Arguments | Description                                                        |
+| ----------- | ----------------------------------------------------------------------- | --------- | ------------------------------------------------------------------ |
+| `/wmX/cs`   | N/A                                                                     | `i`       | A color currently being selected {1,2,3,4}, 0 is no color selected |
+| `/wmX/cv`   | N/A                                                                     | `c`       | Color value                                                        |
+| N/A         | D-pad UP + Nunchuk joystick (hue) + IR position (saturation + value)    | N/A       | Color 1 select                                                     |
+| N/A         | D-pad RIGHT + Nunchuk joystick (hue) + IR position (saturation + value) | N/A       | Color 2 select                                                     |
+| N/A         | D-pad DOWN + Nunchuk joystick (hue) + IR position (saturation + value)  | N/A       | Color 3 select                                                     |
+| N/A         | D-pad LEFT + Nunchuk joystick (hue) + IR position (saturation + value)  | N/A       | Color 4 select                                                     |
+| N/A         | Nunchuk C button + Nunchuk joystick X                                   | N/A       | Linear choice between color 2 and 4, middle is black               |
+| N/A         | Nunchuk C button + Nunchuk joystick Y                                   | N/A       | Linear choice between color 1 and 3, middle is black               |
+| `/wmX/f1`   | Nunchuk C button + D-pad UP long press                                  | `i`       | Toggle function 1                                                  |
+| `/wmX/f2`   | Nunchuk C button + D-pad RIGHT long press                               | `i`       | Toggle function 2                                                  |
+| `/wmX/f3`   | Nunchuk C button + D-pad DOWN long press                                | `i`       | Toggle function 3                                                  |
+| `/wmX/f4`   | Nunchuk C button + D-pad LEFT long press                                | `i`       | Toggle function 4                                                  |
 
 Notes:
 
