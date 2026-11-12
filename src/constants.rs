@@ -21,3 +21,12 @@ pub const DEFAULT_DESTINATION_PORT: u16 = 10123;
 
 /// Long press time
 pub const FUNCTION_LONG_PRESS: Duration = Duration::from_millis(250);
+
+/// Default color 1
+pub const COLOR_1: [u8; 3] = [255, 0, 0]; // Red
+/// Default color 2
+pub const COLOR_2: [u8; 3] = [0, 255, 0]; // Green
+/// Default color 3
+pub const COLOR_3: [u8; 3] = [0, 0, 255]; // Blue
+/// Default color 4
+pub const COLOR_4: [u8; 3] = [255, 255, 255]; // White

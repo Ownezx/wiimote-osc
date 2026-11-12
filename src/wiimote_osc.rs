@@ -1,22 +1,25 @@
 //! Wiimote OSC core logic
 
-use open_sound_control::{OscArgument, OscMessage, OscSender};
+use open_sound_control::{argument::OscColour, OscArgument, OscMessage, OscSender};
 use std::net::IpAddr;
 use std::thread;
 use std::time::Instant;
 use wiiuse_rs::{NunchukButtons, WiimoteButtons, WiimoteSet, WiimoteState};
 
 use crate::constants::{
-    FIND_TIMEOUT, FUNCTION_LONG_PRESS, MAX_WIIMOTES, OSC_SEND_INTERVAL, POLL_INTERVAL,
-    WIIMOTE_NUMBER,
+    COLOR_1, COLOR_2, COLOR_3, COLOR_4, FIND_TIMEOUT, FUNCTION_LONG_PRESS, MAX_WIIMOTES,
+    OSC_SEND_INTERVAL, POLL_INTERVAL, WIIMOTE_NUMBER,
 };
+
+/// Tracks the current RGB color.
+type RgbColor = [u8; 3];
 
 /// Tracks the state of an individual function toggle.
 #[derive(Default)]
 struct FunctionToggle {
-    /// Time since the button has been started
+    /// Time since the button has been started.
     pressed_since: Option<Instant>,
-    /// The button has already been triggered
+    /// The button has already been triggered.
     triggered: bool,
     /// Current status of the toggle.
     enabled: bool,
@@ -25,7 +28,7 @@ struct FunctionToggle {
 /// Tracks all four function toggles.
 #[derive(Default)]
 struct FunctionToggles {
-    ///Array containing the value of all four toggles.
+    /// Array containing the value of all four toggles.
     functions: [FunctionToggle; 4],
 }
 
@@ -36,6 +39,9 @@ pub fn run(destination_ip: IpAddr, destination_port: u16) -> Result<(), String> 
 
     let mut devices = connect_wiimote()?;
     let mut function_toggles = FunctionToggles::default();
+
+    // The color starts black and remains unchanged until Nunchuk Z is pressed.
+    let mut current_color: RgbColor = COLOR_4;
 
     println!("Sending Wiimote OSC to {destination_ip_text}:{destination_port} at 50 Hz.");
     println!("Press Ctrl+C to stop.");
@@ -49,12 +55,18 @@ pub fn run(destination_ip: IpAddr, destination_port: u16) -> Result<(), String> 
             // Update toggle states on every controller poll.
             update_function_toggles(&state, &mut function_toggles);
 
+            // Update the color only while Nunchuk Z is held.
+            update_color(&state, &mut current_color);
+
             let now = Instant::now();
 
             if now >= next_osc_send {
                 send_accelerometer(&osc_sender, WIIMOTE_NUMBER, &state);
                 send_buttons(&osc_sender, WIIMOTE_NUMBER, &state);
                 send_function_states(&osc_sender, WIIMOTE_NUMBER, &function_toggles);
+
+                // Always send the current color at the OSC send rate (50 Hz).
+                send_color(&osc_sender, WIIMOTE_NUMBER, current_color);
 
                 next_osc_send = now + OSC_SEND_INTERVAL;
             }
@@ -95,6 +107,62 @@ fn connect_wiimote() -> Result<WiimoteSet, String> {
     println!("Connected.");
 
     Ok(devices)
+}
+
+/// Update the stored color using the Nunchuk joystick.
+///
+/// Color changes are only accepted while the Nunchuk Z button is held.
+///
+/// When both axes are moved, their RGB contributions are added together.
+fn update_color(state: &WiimoteState, current_color: &mut RgbColor) {
+    let nunchuk = match &state.nunchuk {
+        Some(nunchuk) => nunchuk,
+        None => return,
+    };
+
+    let z_is_down = nunchuk.buttons.down.contains(NunchukButtons::Z)
+        || nunchuk.buttons.held.contains(NunchukButtons::Z);
+
+    // Do not modify the stored color unless Z is held.
+    if !z_is_down {
+        return;
+    }
+
+    let x = nunchuk.joystick.x.clamp(-1.0, 1.0);
+    let y = nunchuk.joystick.y.clamp(-1.0, 1.0);
+
+    // Select the endpoint color and its intensity for each axis.
+    let x_color = if x < 0.0 { COLOR_2 } else { COLOR_4 };
+
+    let y_color = if y < 0.0 { COLOR_1 } else { COLOR_3 };
+
+    let x_amount = x.abs();
+    let y_amount = y.abs();
+
+    // Add the two axis contributions, limiting each RGB channel to 255.
+    *current_color = std::array::from_fn(|channel| {
+        let value = x_color[channel] as f32 * x_amount + y_color[channel] as f32 * y_amount;
+
+        value.round().clamp(0.0, 255.0) as u8
+    });
+}
+
+/// Send the current RGB color as an OSC color argument.
+///
+/// This is intentionally called at 50 Hz, regardless of whether the
+/// Nunchuk Z button is currently held.
+fn send_color(sender: &OscSender, wiimote_number: usize, color: RgbColor) {
+    let message = OscMessage {
+        address: format!("/wm{wiimote_number}/cv"),
+        arguments: vec![OscArgument::Colour(OscColour {
+            red: color[0],
+            green: color[1],
+            blue: color[2],
+            alpha: 255,
+        })],
+    };
+
+    sender.send_message(&message);
 }
 
 /// Send Wii Remote and optional Nunchuk X, Y, and Z G-force values as OSC float messages.
@@ -169,7 +237,7 @@ fn send_function_states(sender: &OscSender, wiimote_number: usize, toggles: &Fun
 
 /// Handle Nunchuk C + D-pad long presses.
 ///
-/// Each combination must be held continuously for one second.
+/// Each combination must be held continuously for FUNCTION_LONG_PRESS.
 /// A function toggles only once per long press.
 fn update_function_toggles(state: &WiimoteState, toggles: &mut FunctionToggles) {
     let nunchuk = match &state.nunchuk {

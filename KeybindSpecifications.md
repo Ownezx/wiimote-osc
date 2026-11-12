@@ -97,6 +97,5 @@ These messages describe device availability. They should be emitted when the cor
 
 Notes:
 
-- Color output values between 0 and 1
 - To select the color, the nunchuk is used as a 360º control for hue (if in much bigger deadzone don't modify color) and the IRx for saturation and IRy for value
-- long presses are 1 second long
+- long presses are 0.25 second long

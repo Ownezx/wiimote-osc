@@ -400,7 +400,7 @@ dependencies = [
 [[package]]
 name = "wiiuse-rs"
 version = "0.1.0"
-source = "git+https://github.com/Ownezx/wiiuse-rs.git?branch=main#90fed6f0ba79d9f573c63ce57a3a32d435523d5c"
+source = "git+https://github.com/Ownezx/wiiuse-rs.git?branch=main#203e5dd1fc0d95cd5e1b34ce02462b0eae8fdd2e"
 dependencies = [
  "bindgen",
  "cc",
